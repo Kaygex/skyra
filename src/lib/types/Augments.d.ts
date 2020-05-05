@@ -60,6 +60,7 @@ declare module 'discord.js' {
 
 	interface TextChannel {
 		sniped: Message | null;
+		toString(): string;
 	}
 
 	interface GuildMember {

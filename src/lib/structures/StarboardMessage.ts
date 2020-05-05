@@ -289,6 +289,7 @@ export class StarboardMessage {
 			this.enabled = Boolean(data.enabled);
 			this.existenceStatus = true;
 
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			const channel = this.manager.starboardChannel!;
 			if (data.star_message_id) {
 				await channel.messages.fetch(data.star_message_id)
@@ -317,6 +318,7 @@ export class StarboardMessage {
 				if (error.code === APIErrors.UnknownMessage) await this.edit({ star_message_id: null, enabled: false });
 			}
 		} else {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			const promise = this.manager.starboardChannel!.send(content, this.embed!)
 				.then(message => { this.starMessage = message; })
 				.catch(error => {

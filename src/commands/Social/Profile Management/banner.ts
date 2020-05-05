@@ -26,8 +26,9 @@ const CDN_URL = 'https://cdn.skyra.pw/img/banners/';
 })
 export default class extends SkyraCommand {
 
-	private readonly banners: Map<string, BannerCache> = new Map();
+	// eslint-disable-next-line @typescript-eslint/no-invalid-this
 	private readonly listPrompt = this.definePrompt('<all|user>');
+	private readonly banners: Map<string, BannerCache> = new Map();
 	private display: UserRichDisplay | null = null;
 
 	public async buy(message: KlasaMessage, [banner]: [BannerCache]) {
@@ -118,7 +119,7 @@ export default class extends SkyraCommand {
 	}
 
 	private _buyList(message: KlasaMessage) {
-		return this._runDisplay(message, this.display!);
+		return this._runDisplay(message, this.display);
 	}
 
 	private _userList(message: KlasaMessage) {
@@ -140,10 +141,12 @@ export default class extends SkyraCommand {
 		return this._runDisplay(message, display);
 	}
 
-	private async _runDisplay(message: KlasaMessage, display: UserRichDisplay) {
-		const response = await message.sendEmbed(new MessageEmbed({ description: message.language.tget('SYSTEM_LOADING'), color: BrandingColors.Secondary }));
-		await display.start(response, message.author.id);
-		return response;
+	private async _runDisplay(message: KlasaMessage, display: UserRichDisplay | null) {
+		if (display !== null) {
+			const response = await message.sendEmbed(new MessageEmbed({ description: message.language.tget('SYSTEM_LOADING'), color: BrandingColors.Secondary }));
+			await display.start(response, message.author.id);
+			return response;
+		}
 	}
 
 	private async _prompt(message: KlasaMessage, banner: BannerCache) {

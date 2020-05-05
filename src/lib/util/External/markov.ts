@@ -17,7 +17,7 @@ export class Markov {
 		if (!currentWord) return '';
 
 		this.sentence = currentWord;
-		let word: WordBankValue | undefined;
+		let word: WordBankValue | undefined = undefined;
 		while (typeof (word = this.wordBank.get(currentWord)) !== 'undefined' && !this.endFn()) {
 			currentWord = pickByWeights(word)!;
 			this.sentence += ` ${currentWord}`;
@@ -78,14 +78,15 @@ export class Markov {
 				return this;
 			}
 			case 'number':
-				this.endFn = () => this.countWords() > (fnEnd as number);
+				this.endFn = () => this.countWords() > (fnEnd);
 				return this;
 			default: throw new TypeError('Expected either a function, string, number, or undefined.');
 		}
 	}
 
-	private startFn: MarkovStartFunction = (wordList: WordBank) => iteratorAt(wordList.keys(), Math.floor(Math.random() * wordList.size))!;
+	// eslint-disable-next-line @typescript-eslint/no-invalid-this
 	private endFn: MarkovEndFunction = () => this.countWords() > 7;
+	private startFn: MarkovStartFunction = (wordList: WordBank) => iteratorAt(wordList.keys(), Math.floor(Math.random() * wordList.size))!;
 
 	private countWords() {
 		let count = 0;

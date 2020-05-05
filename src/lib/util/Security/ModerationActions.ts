@@ -665,6 +665,7 @@ export class ModerationActions {
 		const stickyRoles = guildStickyRoles[stickyRolesIndex];
 		if (stickyRoles.roles.includes(roleID)) return;
 
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		const clone = deepClone(stickyRoles) as Mutable<StickyRole>;
 		clone.roles.push(roleID);
 		await this.guild.settings.update(GuildSettings.StickyRoles, stickyRoles, {
@@ -684,6 +685,7 @@ export class ModerationActions {
 
 		if (stickyRoles.roles.length > 1) {
 			// If there are more than one role, remove the muted one and update the entry keeping the rest.
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			const clone = deepClone(stickyRoles) as Mutable<StickyRole>;
 			clone.roles.splice(roleIndex, 1);
 			await this.guild.settings.update(GuildSettings.StickyRoles, clone, {

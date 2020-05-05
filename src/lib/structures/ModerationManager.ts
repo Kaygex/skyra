@@ -143,6 +143,7 @@ export class ModerationManager extends Collection<number, ModerationManagerEntry
 		if (!entries) return null;
 
 		const parsedEntries = Array.isArray(entries)
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			? entries.map(entry => entry instanceof ModerationManagerEntry ? entry : new ModerationManagerEntry(this, entry!))
 			: [entries instanceof ModerationManagerEntry ? entries : new ModerationManagerEntry(this, entries)];
 

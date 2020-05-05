@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { HardPunishment, ModerationEvent } from '@lib/structures/ModerationEvent';
 import { SelfModeratorBitField, SelfModeratorHardActionFlags } from '@lib/structures/SelfModeratorBitField';
 import { Events } from '@lib/types/Enums';

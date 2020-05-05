@@ -1,4 +1,4 @@
-import { TwitchHelixBearerToken, TwitchHelixGameSearchResult, TwitchHelixResponse, TwitchHelixUsersSearchResult, TwitchKrakenChannelSearchResults } from '@lib/types/definitions/Twitch';
+import { TwitchHelixBearerToken, TwitchHelixGameSearchResult, TwitchHelixResponse, TwitchHelixUsersSearchResult, TwitchKrakenChannelSearchResult } from '@lib/types/definitions/Twitch';
 import { TOKENS, TWITCH_CALLBACK } from '@root/config';
 import { Mime, Time } from '@utils/constants';
 import { enumerable, fetch, FetchMethods, FetchResultTypes } from '@utils/util';
@@ -62,21 +62,21 @@ export class Twitch {
 	}
 
 	public async fetchUsersByLogin(logins: readonly string[]) {
-		return this._performApiGETRequest(`users?login=${this._formatMultiEntries(logins, true)}`);
+		return this._performApiGETRequest<{ users: TwitchKrakenChannelSearchResult[]; _total: number }>(`users?login=${this._formatMultiEntries(logins, true)}`);
 	}
 
 	public async fetchUsers(ids: readonly string[] = [], logins: readonly string[] = []) {
 		const search: string[] = [];
 		for (const id of ids) search.push(`id=${encodeURIComponent(id)}`);
 		for (const login of logins) search.push(`login=${encodeURIComponent(login)}`);
-		return this._performApiGETRequest(`users?${search.join('&')}`, ApiVersion.Helix);
+		return this._performApiGETRequest<TwitchHelixResponse<TwitchHelixUsersSearchResult>>(`users?${search.join('&')}`, ApiVersion.Helix);
 	}
 
 	public async fetchGame(ids: readonly string[] = [], names: readonly string[] = []) {
 		const search: string[] = [];
 		for (const id of ids) search.push(`id=${encodeURIComponent(id)}`);
 		for (const name of names) search.push(`name=${encodeURIComponent(name)}`);
-		return this._performApiGETRequest(`games?${search.join('&')}`, ApiVersion.Helix);
+		return this._performApiGETRequest<TwitchHelixResponse<TwitchHelixGameSearchResult>>(`games?${search.join('&')}`, ApiVersion.Helix);
 	}
 
 	public checkSignature(algorithm: string, signature: string, data: any) {

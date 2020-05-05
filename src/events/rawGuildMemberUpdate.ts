@@ -107,6 +107,7 @@ export default class extends Event {
 		// If the user does not have multiple roles from any set cancel
 		if (!hasMultipleRolesInOneSet) return;
 
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		const auditLogs = await api(this.client).guilds(guild.id)['audit-logs'].get({
 			query: {
 				limit: 10,

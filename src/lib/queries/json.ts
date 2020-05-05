@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { Databases } from '@lib/types/constants/Constants';
 import { RawDashboardUserSettings } from '@lib/types/settings/raw/RawDashboardUserSettings';
 import { RawGiveawaySettings } from '@lib/types/settings/raw/RawGiveawaySettings';

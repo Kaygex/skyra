@@ -42,7 +42,7 @@ export default class extends SkyraCommand {
 		const canvas = new Canvas(350, 393);
 
 		const buffers = [this.template, await fetchAvatar(user, 512)];
-		const [imgTitle, imgTriggered] = buffers.map(buffer => {
+		const [imgTitle, imgTriggered] = buffers.map((buffer: Buffer | null) => {
 			const image = new Image(128, 128);
 			image.src = buffer!;
 			return image;

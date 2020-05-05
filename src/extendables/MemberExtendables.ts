@@ -17,7 +17,7 @@ export default class extends Extendable {
 	}
 
 	public get isDJ(this: GuildMember) {
-		const djRole = this.guild!.settings.get(GuildSettings.Roles.Dj);
+		const djRole = this.guild.settings.get(GuildSettings.Roles.Dj);
 
 		return (this.roles.has(djRole) || this.isStaff);
 	}
@@ -27,14 +27,14 @@ export default class extends Extendable {
 	}
 
 	public get isAdmin(this: GuildMember) {
-		const adminRole = this.guild!.settings.get(GuildSettings.Roles.Admin);
+		const adminRole = this.guild.settings.get(GuildSettings.Roles.Admin);
 
 		if (this.roles.has(adminRole)) return true;
 		return this.permissions.has(Permissions.FLAGS.MANAGE_GUILD);
 	}
 
 	public get isMod(this: GuildMember) {
-		const moderatorRole = this.guild!.settings.get(GuildSettings.Roles.Moderator);
+		const moderatorRole = this.guild.settings.get(GuildSettings.Roles.Moderator);
 
 		if (this.roles.has(moderatorRole)) return true;
 		return this.permissions.has(Permissions.FLAGS.BAN_MEMBERS);
