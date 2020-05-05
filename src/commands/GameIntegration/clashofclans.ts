@@ -16,8 +16,6 @@ const enum ClashOfClansFetchCategories {
 export default class extends SkyraCommand {
 
 	private readonly kPlayerTagRegex = /#[A-Z0-9]{3,}/;
-	private readonly kStringArg = this.client.arguments.get('string')!;
-	private readonly kSpreadStringArg = this.client.arguments.get('...string')!;
 
 	public constructor(store: CommandStore, file: string[], directory: string) {
 		super(store, file, directory, {
@@ -33,11 +31,11 @@ export default class extends SkyraCommand {
 
 		this.createCustomResolver('tagOrName', (arg, possible, message, [action]) => {
 			if (action === 'clan') {
-				return this.kSpreadStringArg.run(arg, possible, message);
+				return this.client.arguments.get('...string')!.run(arg, possible, message);
 			}
 
 			if (action === 'player') {
-				if (this.kPlayerTagRegex.test(arg)) return this.kStringArg.run(arg, possible, message);
+				if (this.kPlayerTagRegex.test(arg)) return this.client.arguments.get('string')!.run(arg, possible, message);
 
 				throw message.language.tget('COMMAND_CLASHOFCLANS_INVALID_PLAYER_TAG', arg);
 			}
@@ -78,11 +76,11 @@ export default class extends SkyraCommand {
 				url.href += encodeURIComponent(query);
 			}
 
-			return await fetch(url, {
+			return await fetch<C extends ClashOfClansFetchCategories.CLANS ? ClashOfClans.ClansResponse : ClashOfClans.Player>(url, {
 				headers: {
 					Authorization: `Bearer ${TOKENS.CLASH_OF_CLANS_KEY}`
 				}
-			}, FetchResultTypes.JSON) as Promise<C extends ClashOfClansFetchCategories.CLANS ? ClashOfClans.ClansResponse : ClashOfClans.Player>;
+			}, FetchResultTypes.JSON);
 		} catch (err) {
 			if (category === ClashOfClansFetchCategories.CLANS) throw message.language.tget(`COMMAND_CLASHOFCLANS_CLANS_QUERY_FAIL`, query);
 			else throw message.language.tget(`COMMAND_CLASHOFCLANS_PLAYERS_QUERY_FAIL`, query);

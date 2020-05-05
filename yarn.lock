@@ -661,10 +661,15 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@^13.13.4":
+"@types/node@*":
   version "13.13.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.4.tgz#1581d6c16e3d4803eb079c87d4ac893ee7501c2c"
   integrity sha512-x26ur3dSXgv5AwKS0lNfbjpCakGIduWU1DU91Zz58ONRWrIKGunmZBNv4P7N+e27sJkiGDsw/3fT4AtsqQBrBA==
+
+"@types/node@^13.13.5":
+  version "13.13.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.5.tgz#96ec3b0afafd64a4ccea9107b75bf8489f0e5765"
+  integrity sha512-3ySmiBYJPqgjiHA7oEaIo2Rzz0HrOZ7yrNO5HWyaE5q0lQ3BppDZ3N53Miz8bw2I7gh1/zir2MGVZBvpb1zq9g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -1727,10 +1732,10 @@ escodegen@^1.14.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-bamboo@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-bamboo/-/eslint-config-bamboo-4.0.0.tgz#437800b868b995173f64cb04274be29d963f4092"
-  integrity sha512-o5xe7wm/FRou+YCwn+Z7JggQxOxN6zAvAUos+YmjgAMReqwGo04cY0L9Sp/g41Z+EqtCwWnqV8q8+6R4JFQ/aw==
+eslint-config-bamboo@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-config-bamboo/-/eslint-config-bamboo-4.0.1.tgz#a1122590dbc942b6fd972cbfc02c283652f31445"
+  integrity sha512-ggRdL0ylhzNO9A5Ecl9hDqRoNA+aeY7F0QoPM5k1kNihsss+YRbDYUXKRRu/rFgncuX2MgugorDxIOZPh8fszw==
 
 eslint-scope@^5.0.0:
   version "5.0.0"

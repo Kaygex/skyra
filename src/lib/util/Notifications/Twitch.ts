@@ -62,21 +62,21 @@ export class Twitch {
 	}
 
 	public async fetchUsersByLogin(logins: readonly string[]) {
-		return this._performApiGETRequest(`users?login=${this._formatMultiEntries(logins, true)}`) as Promise<TwitchKrakenChannelSearchResults>;
+		return this._performApiGETRequest(`users?login=${this._formatMultiEntries(logins, true)}`);
 	}
 
 	public async fetchUsers(ids: readonly string[] = [], logins: readonly string[] = []) {
 		const search: string[] = [];
 		for (const id of ids) search.push(`id=${encodeURIComponent(id)}`);
 		for (const login of logins) search.push(`login=${encodeURIComponent(login)}`);
-		return this._performApiGETRequest(`users?${search.join('&')}`, ApiVersion.Helix) as Promise<TwitchHelixResponse<TwitchHelixUsersSearchResult>>;
+		return this._performApiGETRequest(`users?${search.join('&')}`, ApiVersion.Helix);
 	}
 
 	public async fetchGame(ids: readonly string[] = [], names: readonly string[] = []) {
 		const search: string[] = [];
 		for (const id of ids) search.push(`id=${encodeURIComponent(id)}`);
 		for (const name of names) search.push(`name=${encodeURIComponent(name)}`);
-		return this._performApiGETRequest(`games?${search.join('&')}`, ApiVersion.Helix) as Promise<TwitchHelixResponse<TwitchHelixGameSearchResult | undefined>>;
+		return this._performApiGETRequest(`games?${search.join('&')}`, ApiVersion.Helix);
 	}
 
 	public checkSignature(algorithm: string, signature: string, data: any) {
@@ -128,7 +128,10 @@ export class Twitch {
 				Authorization: `Bearer ${await this.fetchBearer()}`
 			}
 		};
-		return await fetch(`${api === ApiVersion.Kraken ? this.BASE_URL_KRAKEN : this.BASE_URL_HELIX}${path}`, fetchOptions, FetchResultTypes.JSON) as unknown as T;
+		return fetch<T>(
+			`${api === ApiVersion.Kraken ? this.BASE_URL_KRAKEN : this.BASE_URL_HELIX}${path}`,
+			fetchOptions, FetchResultTypes.JSON
+		);
 	}
 
 	private async _generateBearerToken() {
@@ -136,7 +139,7 @@ export class Twitch {
 		url.searchParams.append('client_secret', this.$clientSecret);
 		url.searchParams.append('client_id', this.$clientID);
 		url.searchParams.append('grant_type', 'client_credentials');
-		const respone = await fetch(url.href, { method: FetchMethods.Post }, FetchResultTypes.JSON) as OauthResponse;
+		const respone = await fetch<OauthResponse>(url.href, { method: FetchMethods.Post }, FetchResultTypes.JSON);
 		const expires = Date.now() + (respone.expires_in * 1000);
 		this.BEARER = { TOKEN: respone.access_token, EXPIRE: expires };
 		return respone.access_token;

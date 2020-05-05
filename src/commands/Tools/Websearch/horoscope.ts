@@ -41,8 +41,8 @@ export default class extends SkyraCommand {
 	private fetchAPI(message: KlasaMessage, sunsign: string, when: string) {
 		const url = new URL(`https://theastrologer-api.herokuapp.com/api/horoscope/${sunsign}/${when}`);
 
-		return fetch(url, FetchResultTypes.JSON)
-			.catch(() => { throw message.language.tget('COMMAND_HOROSCOPE_INVALID_SUNSIGN', sunsign, this.kRandomSunSign()); }) as Promise<SunSignResponse>;
+		return fetch<SunSignResponse>(url, FetchResultTypes.JSON)
+			.catch(() => { throw message.language.tget('COMMAND_HOROSCOPE_INVALID_SUNSIGN', sunsign, this.kRandomSunSign()); });
 	}
 
 

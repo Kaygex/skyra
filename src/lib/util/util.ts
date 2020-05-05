@@ -183,7 +183,7 @@ export function cutText(str: string, length: number) {
 }
 
 export function iteratorAt<T>(iterator: IterableIterator<T>, position: number) {
-	let result: IteratorResult<T>;
+	let result: IteratorResult<T> | null = null;
 	while (position-- > 0) {
 		result = iterator.next();
 		if (result.done) return null;
@@ -194,7 +194,7 @@ export function iteratorAt<T>(iterator: IterableIterator<T>, position: number) {
 }
 
 export function iteratorRange<T>(iterator: IterableIterator<T>, position: number, offset: number) {
-	let result: IteratorResult<T>;
+	let result: IteratorResult<T> | null = null;
 	while (position-- > 0) {
 		result = iterator.next();
 		if (result.done) return [];
@@ -256,15 +256,15 @@ export const enum FetchMethods {
 	Delete = 'DELETE'
 }
 
-export async function fetch(url: URL | string, type: FetchResultTypes.JSON): Promise<unknown>;
-export async function fetch(url: URL | string, options: RequestInit, type: FetchResultTypes.JSON): Promise<unknown>;
+export async function fetch<R>(url: URL | string, type: FetchResultTypes.JSON): Promise<R>;
+export async function fetch<R>(url: URL | string, options: RequestInit, type: FetchResultTypes.JSON): Promise<R>;
 export async function fetch(url: URL | string, type: FetchResultTypes.Buffer): Promise<Buffer>;
 export async function fetch(url: URL | string, options: RequestInit, type: FetchResultTypes.Buffer): Promise<Buffer>;
 export async function fetch(url: URL | string, type: FetchResultTypes.Text): Promise<string>;
 export async function fetch(url: URL | string, options: RequestInit, type: FetchResultTypes.Text): Promise<string>;
 export async function fetch(url: URL | string, type: FetchResultTypes.Result): Promise<Response>;
 export async function fetch(url: URL | string, options: RequestInit, type: FetchResultTypes.Result): Promise<Response>;
-export async function fetch(url: URL | string, options: RequestInit, type: FetchResultTypes): Promise<Response | Buffer | string | unknown>;
+export async function fetch<R>(url: URL | string, options: RequestInit, type: FetchResultTypes): Promise<Response | Buffer | string | R>;
 export async function fetch(url: URL | string, options: RequestInit | FetchResultTypes, type?: FetchResultTypes) {
 	if (typeof options === 'undefined') {
 		options = {};
@@ -276,7 +276,7 @@ export async function fetch(url: URL | string, options: RequestInit | FetchResul
 		type = FetchResultTypes.JSON;
 	}
 
-	const result: Response = await nodeFetch(url, options as RequestInit);
+	const result: Response = await nodeFetch(url, options);
 	if (!result.ok) throw new Error(await result.text());
 
 	switch (type) {

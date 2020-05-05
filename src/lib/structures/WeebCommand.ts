@@ -36,12 +36,12 @@ export abstract class WeebCommand extends SkyraCommand {
 		query.searchParams.append('type', this.queryType);
 		query.searchParams.append('nsfw', String((message.channel as TextChannel).nsfw));
 
-		const { url } = await fetch(query, {
+		const { url } = await fetch<WeebCommandResult>(query, {
 			headers: {
 				'Authorization': `Wolke ${TOKENS.WEEB_SH_KEY}`,
 				'User-Agent': `Skyra/${VERSION}`
 			}
-		}, FetchResultTypes.JSON) as WeebCommandResult;
+		}, FetchResultTypes.JSON);
 
 		return message.sendMessage(this.requiresUser
 			? message.language.tget(this.responseName as LanguageKeysComplex, params![0].username)

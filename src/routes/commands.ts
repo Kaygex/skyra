@@ -1,19 +1,18 @@
 import { isFunction } from '@klasa/utils';
 import ApiRequest from '@lib/structures/api/ApiRequest';
 import ApiResponse from '@lib/structures/api/ApiResponse';
+import { ApplyOptions } from '@skyra/decorators';
 import { ratelimit } from '@utils/util';
-import { Route, RouteStore } from 'klasa-dashboard-hooks';
+import { Language } from 'klasa';
+import { Route, RouteOptions } from 'klasa-dashboard-hooks';
 
+@ApplyOptions<RouteOptions>({ route: 'commands' })
 export default class extends Route {
-
-	public constructor(store: RouteStore, file: string[], directory: string) {
-		super(store, file, directory, { route: 'commands' });
-	}
 
 	@ratelimit(2, 2500)
 	public get(request: ApiRequest, response: ApiResponse) {
 		const { lang, category } = request.query;
-		const language = (lang && this.client.languages.get(lang as string)) || this.client.languages.default;
+		const language = (lang && this.client.languages.get(lang as string)) ?? this.client.languages.default;
 		const commands = (category
 			? this.client.commands.filter(cmd => cmd.category === category)
 			: this.client.commands
@@ -23,7 +22,8 @@ export default class extends Route {
 			bucket: cmd.bucket,
 			category: cmd.category,
 			cooldown: cmd.cooldown,
-			description: isFunction(cmd.description) ? cmd.description(language) : cmd.description,
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			description: isFunction(cmd.description) ? cmd.description(language as Language) : cmd.description,
 			guarded: cmd.guarded,
 			guildOnly: !cmd.runIn.includes('dm'),
 			name: cmd.name,

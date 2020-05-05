@@ -11,6 +11,7 @@ type PostgresOptions = PoolConfig & Record<PropertyKey, unknown>;
 
 export default class extends SQLProvider {
 
+	/* eslint-disable @typescript-eslint/no-invalid-this */
 	public qb = new QueryBuilder({
 		array: type => `${type}[]`,
 		arraySerializer: (values, piece, resolver) =>
@@ -27,6 +28,7 @@ export default class extends SQLProvider {
 		.add('twitchsubscription', { 'extends': 'any' })
 		.add('emoji', { 'type': 'VARCHAR(128)', 'extends': 'string' })
 		.add('url', { 'type': 'VARCHAR(128)', 'extends': 'string' });
+	/* eslint-enable @typescript-eslint/no-invalid-this */
 
 	public pgsql: Pool | null = null;
 
@@ -240,7 +242,7 @@ export default class extends SQLProvider {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 		// @ts-ignore 2556
 		const results = await this.run(...sql);
-		return results.rows[0] || null;
+		return results.rows[0] ?? null;
 	}
 
 	public cValue(table: string, key: string, value: unknown) {
@@ -248,7 +250,7 @@ export default class extends SQLProvider {
 		if (typeof gateway === 'undefined') return this.cUnknown(value);
 
 		const entry = gateway.schema.get(key) as SchemaEntry;
-		if (!entry || entry.type === 'Folder') return this.cUnknown(value);
+		if (entry === undefined || entry.type === 'Folder') return this.cUnknown(value);
 
 		const qbEntry = this.qb.get(entry.type);
 		return qbEntry
@@ -268,7 +270,7 @@ export default class extends SQLProvider {
 			const key = keys[i];
 			const value = values[i];
 			const entry = schema.get(key) as SchemaEntry;
-			if (!entry || entry.type === 'Folder') {
+			if (entry === undefined || entry.type === 'Folder') {
 				parsedValues.push(this.cUnknown(value));
 				continue;
 			}

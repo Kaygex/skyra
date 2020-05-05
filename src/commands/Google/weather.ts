@@ -47,10 +47,10 @@ export default class extends SkyraCommand {
 			if (!continent.length && component.types.includes('continent')) continent = component.long_name;
 		}
 
-		const localityOrCountry = locality! ? country! : '';
-		const state = locality! && governing! ? governing! : localityOrCountry || '';
+		const localityOrCountry = locality ? country : null;
+		const state = locality && governing ? governing : localityOrCountry ?? null;
 
-		const { currently } = await fetch(`https://api.darksky.net/forecast/${TOKENS.DARKSKY_WEATHER_KEY}/${params}?exclude=minutely,hourly,flags&units=si`, FetchResultTypes.JSON) as WeatherResultOk;
+		const { currently } = await fetch<WeatherResultOk>(`https://api.darksky.net/forecast/${TOKENS.DARKSKY_WEATHER_KEY}/${params}?exclude=minutely,hourly,flags&units=si`, FetchResultTypes.JSON);
 
 		const { icon } = currently;
 		const condition = currently.summary;
@@ -86,7 +86,7 @@ export default class extends SkyraCommand {
 			// Prefecture Name
 			.setTextFont('16px Roboto')
 			.setColor(theme === 'light' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)')
-			.addText(state || '', 30, 30)
+			.addText(state ?? '', 30, 30)
 
 			// Temperature
 			.setTextFont("48px 'Roboto Mono'")
@@ -147,7 +147,7 @@ export default class extends SkyraCommand {
 
 interface WeatherData {
 	geoCodeLocation: string;
-	state: string;
+	state: string | null;
 	condition: string;
 	icon: string;
 	chanceOfRain: number;

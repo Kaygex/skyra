@@ -2,7 +2,7 @@ import { SkyraClient } from '@lib/SkyraClient';
 import { UserAuthObject } from '@lib/structures/api/ApiRequest';
 import { Events } from '@lib/types/Enums';
 import { CLIENT_SECRET } from '@root/config';
-import { enumerable } from '@utils/util';
+import { enumerable, noop } from '@utils/util';
 import { KlasaUser } from 'klasa';
 import { Util } from 'klasa-dashboard-hooks';
 import WebSocket, { Data, Server } from 'ws';
@@ -95,16 +95,24 @@ export default class DashboardWebsocketUser {
 				await guild.music.resume().catch(() => null);
 				break;
 			}
+			case MusicAction.AddSong: {
+				noop();
+				break;
+			}
+			case MusicAction.DeleteSong: {
+				noop();
+				break;
+			}
 		}
 	}
 
 	public async handleAuthenticationMessage(message: IncomingWebsocketMessage) {
 		// If they're already authenticated, or didn't send a id/token, close.
-		if (this.authenticated || !message.data || !message.data.token || !message.data.user_id) {
+		if (this.authenticated || message.data === undefined || !message.data.token || !message.data.user_id) {
 			return this._connection.close(CloseCodes.Unauthorized);
 		}
 
-		let decryptedAuth;
+		let decryptedAuth = undefined;
 		try {
 			decryptedAuth = Util.decrypt(message.data.token, CLIENT_SECRET);
 		} catch {
@@ -115,7 +123,7 @@ export default class DashboardWebsocketUser {
 			return this._connection.close(CloseCodes.Unauthorized);
 		}
 
-		let user;
+		let user = undefined;
 		try {
 			user = await this.client.users.fetch(decryptedAuth.user_id);
 			if (!user) throw null;
@@ -153,6 +161,10 @@ export default class DashboardWebsocketUser {
 					if (!message.data.guild_id) return;
 					this.subscribeToMusic(message.data.guild_id);
 				}
+			}
+			case SubscriptionAction.Unsubscribe: {
+				noop();
+				break;
 			}
 		}
 	}

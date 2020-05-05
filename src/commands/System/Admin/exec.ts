@@ -23,7 +23,7 @@ export default class extends SkyraCommand {
 			.catch(error => ({ stdout: null, stderr: error }));
 		const output = result.stdout ? `**\`OUTPUT\`**${util.codeBlock('prolog', result.stdout)}` : '';
 		const outerr = result.stderr ? `**\`ERROR\`**${util.codeBlock('prolog', result.stderr)}` : '';
-		const joined = [output, outerr].join('\n') || 'No output';
+		const joined = [output, outerr].join('\n');
 
 		return message.sendMessage(joined.length > 2000 ? await this.getHaste(joined).catch(() => new MessageAttachment(Buffer.from(joined), 'output.txt')) : joined);
 	}
